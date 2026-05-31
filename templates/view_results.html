@@ -1,0 +1,116 @@
+{% extends "base.html" %}
+
+{% block title %}View Results - Quizora{% endblock %}
+
+{% block content %}
+<nav class="navbar navbar-expand-lg">
+    <div class="container">
+        <a class="navbar-brand" href="#">
+            <i class="fas fa-shield-alt me-2"></i>Quizora Admin
+        </a>
+        <div class="navbar-nav ms-auto">
+            <a class="nav-link" href="{{ url_for('admin') }}">
+                <i class="fas fa-arrow-left me-1"></i>Back to Dashboard
+            </a>
+            <a class="nav-link" href="{{ url_for('logout') }}">
+                <i class="fas fa-sign-out-alt me-1"></i>Logout
+            </a>
+        </div>
+    </div>
+</nav>
+
+<div class="container mt-4">
+    <div class="card results-card fade-in">
+        <div class="card-body">
+            <div class="results-header text-center mb-4">
+                <h2>Test Results Overview</h2>
+            </div>
+            <div class="results-body">
+                {% for subject_id, subject_data in results.items() %}
+                <div class="subject-section">
+                    <div class="subject-header">
+                        <h3>{{ subject_data.name }}</h3>
+                    </div>
+                    {% for test_id, test_data in subject_data.tests.items() %}
+                    <div class="test-section">
+                        <div class="test-header">
+                            <h4>{{ test_data.name }}</h4>
+                        </div>
+                        <div class="test-stats">
+                            <div class="stat-item">
+                                <div class="stat-value">{{ "%.1f"|format(test_data.stats.highest) }}</div>
+                                <div class="stat-label">Highest Score</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value">{{ "%.1f"|format(test_data.stats.lowest) }}</div>
+                                <div class="stat-label">Lowest Score</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value">{{ "%.1f"|format(test_data.stats.average) }}</div>
+                                <div class="stat-label">Average Score</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value">{{ test_data.stats.total_attempts }}</div>
+                                <div class="stat-label">Total Attempts</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value">{{ "%.1f"|format(test_data.stats.pass_count /
+                                    test_data.stats.total_attempts * 100) if test_data.stats.total_attempts > 0 else 0
+                                    }}%</div>
+                                <div class="stat-label">Pass Rate</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value">{{ test_data.total_marks }}</div>
+                                <div class="stat-label">Total Marks</div>
+                            </div>
+                        </div>
+
+                        <div class="table-responsive">
+                            <table class="table results-table">
+                                <thead>
+                                    <tr>
+                                        <th>Rank</th>
+                                        <th>Student Name</th>
+                                        <th>Score</th>
+                                        <th>Percentage</th>
+                                        <th>Status</th>
+                                        <th>Attempt Date</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for result in test_data.results %}
+                                    <tr>
+                                        <td>{{ loop.index }}</td>
+                                        <td>{{ result.student_name }}</td>
+                                        <td>{{ result.marks }}/{{ test_data.total_marks }}</td>
+                                        <td>
+                                            <div>{{ "%.1f"|format(result.percentage) }}%</div>
+                                            <div class="progress">
+                                                <div class="progress-bar" role="progressbar"
+                                                    style="width: {{ result.percentage }}%"
+                                                    aria-valuenow="{{ result.percentage }}" aria-valuemin="0"
+                                                    aria-valuemax="100">
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <span
+                                                class="badge {% if result.status == 'PASS' %}bg-success{% else %}bg-danger{% endif %}">
+                                                {{ result.status }}
+                                            </span>
+                                        </td>
+                                        <td>{{ result.attempt_date }}</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

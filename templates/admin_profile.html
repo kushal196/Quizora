@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Profile - Quizora</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+    <style>
+        .profile-header {
+            background: linear-gradient(135deg, #0d6efd 0%, #0dcaf0 100%);
+            color: white;
+            padding: 2rem 0;
+            margin-bottom: 2rem;
+        }
+        .profile-avatar {
+            width: 100px;
+            height: 100px;
+            background-color: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+        }
+        .profile-avatar i {
+            font-size: 3rem;
+            color: white;
+        }
+        .form-card {
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        }
+        .test-card {
+            transition: transform 0.2s;
+            border-left: 4px solid #0d6efd;
+        }
+        .test-card:hover {
+            transform: translateY(-5px);
+        }
+        .test-stats {
+            font-size: 0.9rem;
+            color: #6c757d;
+        }
+        .test-badge {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#">Quizora - Admin Profile</a>
+            <div class="navbar-nav ms-auto">
+                <a class="nav-link" href="{{ url_for('admin') }}">Back to Dashboard</a>
+                <a class="nav-link" href="{{ url_for('logout') }}">Logout</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="profile-header">
+        <div class="container">
+            <div class="text-center">
+                <div class="profile-avatar">
+                    <i class="fas fa-user-shield"></i>
+                </div>
+                <h2>{{ admin[1] }}</h2>
+                <p class="mb-0">{{ admin[2] }}</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="card form-card">
+                    <div class="card-body">
+                        <h5 class="card-title mb-4">Update Profile</h5>
+                        <form id="profile-form">
+                            <div class="mb-3">
+                                <label for="name" class="form-label">Name</label>
+                                <input type="text" class="form-control" id="name" value="{{ admin[1] }}" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="email" class="form-label">Email</label>
+                                <input type="email" class="form-control" id="email" value="{{ admin[2] }}" disabled>
+                            </div>
+                            <div class="mb-3">
+                                <label for="current_password" class="form-label">Current Password</label>
+                                <input type="password" class="form-control" id="current_password" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="new_password" class="form-label">New Password (optional)</label>
+                                <input type="password" class="form-control" id="new_password">
+                            </div>
+                            <button type="submit" class="btn btn-primary w-100">
+                                <i class="fas fa-save me-2"></i>Save Changes
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h5 class="card-title mb-0">Tests Created</h5>
+                        <span class="badge bg-primary">{{ tests|length }} Tests</span>
+                    </div>
+                    <div class="card-body">
+                        {% if tests %}
+                            <div class="row">
+                                {% for test in tests %}
+                                <div class="col-md-6 mb-4">
+                                    <div class="card test-card h-100">
+                                        <div class="card-body">
+                                            <span class="badge bg-info test-badge">{{ test[3] }} marks</span>
+                                            <h5 class="card-title">{{ test[1] }}</h5>
+                                            <p class="card-text text-muted">{{ test[2] }}</p>
+                                            <div class="test-stats">
+                                                <i class="fas fa-users me-2"></i>{{ test[4] if test[4] else 0 }} attempts
+                                                <br>
+                                                <i class="fas fa-calendar me-2"></i>Created on {{ test[5].strftime('%B %d, %Y') }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            <div class="text-center text-muted py-5">
+                                <i class="fas fa-question-circle fa-3x mb-3"></i>
+                                <p>No tests created yet</p>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.getElementById('profile-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData();
+            formData.append('name', document.getElementById('name').value);
+            formData.append('current_password', document.getElementById('current_password').value);
+            formData.append('new_password', document.getElementById('new_password').value);
+
+            fetch('/admin/profile/update', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('Profile updated successfully!');
+                    location.reload();
+                } else {
+                    alert(data.message || 'Error updating profile');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error updating profile. Please try again.');
+            });
+        });
+    </script>
+</body>
+</html> 

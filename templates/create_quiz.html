@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Quiz</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="admin-body">
+    <div class="dashboard-container">
+        <div class="dashboard-header">
+            <h1>Create Quiz</h1>
+            <a href="{{ url_for('admin') }}" class="btn btn-outline">
+                <i class="fas fa-arrow-left"></i> Back to Admin
+            </a>
+        </div>
+
+        <form id="quiz-form" class="quiz-form">
+            <div class="form-group">
+                <label for="quiz-title">Quiz Title</label>
+                <input type="text" id="quiz-title" name="quiz-title" required>
+            </div>
+
+            <div id="questions-container"></div>
+
+            <button type="button" id="add-question" class="btn btn-secondary">Add Question</button>
+            <button type="submit" id="save-quiz" class="btn btn-primary">Save Quiz</button>
+        </form>
+    </div>
+
+    <script src="{{ url_for('static', filename='create_quiz.js') }}"></script>
+</body>
+</html>

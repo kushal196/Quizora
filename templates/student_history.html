@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test History - Quizora</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg">
+        <div class="container">
+            <a class="navbar-brand" href="#">Quizora - Test History</a>
+            <div class="navbar-nav ms-auto">
+                <a class="nav-link" href="{{ url_for('student') }}">Back to Dashboard</a>
+                <a class="nav-link" href="{{ url_for('logout') }}">Logout</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <div class="card">
+            <div class="card-body">
+                <h3 class="card-title mb-4">Your Test History</h3>
+                {% if test_history %}
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Test Name</th>
+                                <th>Subject</th>
+                                <th>Score</th>
+                                <th>Total Marks</th>
+                                <th>Percentage</th>
+                                <th>Date</th>
+                                <th>Certificate</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for test in test_history %}
+                            <tr>
+                                <td>{{ test[1] }}</td>
+                                <td>{{ test[2] }}</td>
+                                <td>{{ test[3] }}</td>
+                                <td>{{ test[4] }}</td>
+                                <td>
+                                    {% set percentage = (test[3] / test[4] * 100) | round(2) %}
+                                    <span class="badge {% if percentage >= 70 %}bg-success{% elif percentage >= 40 %}bg-warning{% else %}bg-danger{% endif %}">
+                                        {{ percentage }}%
+                                    </span>
+                                </td>
+                                <td>{{ test[5] }}</td>
+                                <td>
+                                    {% if percentage >= 40 %}
+                                    <a href="{{ url_for('download_certificate', test_id=test[0]) }}" class="btn btn-sm btn-outline-primary">
+                                        <i class="fas fa-download"></i> Download
+                                    </a>
+                                    {% else %}
+                                    <span class="text-muted">Not Available</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <div class="text-center py-5">
+                    <i class="fas fa-history fa-3x mb-3 text-muted"></i>
+                    <p class="text-muted">No test history available</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html> 

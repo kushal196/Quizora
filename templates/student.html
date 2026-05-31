@@ -1,0 +1,227 @@
+{% extends "base.html" %}
+
+{% block title %}Student Dashboard - Quizora{% endblock %}
+
+{% block content %}
+<nav class="navbar navbar-expand-lg">
+    <div class="container">
+        <a class="navbar-brand" href="#">
+            <i class="fas fa-graduation-cap me-2"></i>Quizora
+        </a>
+        <div class="navbar-nav ms-auto">
+            <a class="nav-link" href="#" onclick="showProfile()">
+                <i class="fas fa-user-circle me-1"></i>Profile
+            </a>
+            <a class="nav-link" href="#" onclick="showHistory()">
+                <i class="fas fa-history me-1"></i>Test History
+            </a>
+            <a class="nav-link" href="{{ url_for('logout') }}">
+                <i class="fas fa-sign-out-alt me-1"></i>Logout
+            </a>
+        </div>
+    </div>
+</nav>
+
+<div class="container mt-4">
+    <div class="row g-4">
+        <div class="col-md-4">
+            <div class="card dashboard-card fade-in" onclick="showProfile()">
+                <div class="card-body text-center">
+                    <div class="card-icon-wrapper mb-3">
+                        <i class="fas fa-user-circle"></i>
+                    </div>
+                    <h5 class="card-title">Profile</h5>
+                    <p class="card-text text-muted">View and update your profile</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card dashboard-card fade-in" onclick="showHistory()">
+                <div class="card-body text-center">
+                    <div class="card-icon-wrapper mb-3">
+                        <i class="fas fa-history"></i>
+                    </div>
+                    <h5 class="card-title">Test History</h5>
+                    <p class="card-text text-muted">View your past test results</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card dashboard-card fade-in" onclick="showAvailableTests()">
+                <div class="card-body text-center">
+                    <div class="card-icon-wrapper mb-3">
+                        <i class="fas fa-list"></i>
+                    </div>
+                    <h5 class="card-title">Available Tests</h5>
+                    <p class="card-text text-muted">Take new tests</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="available-tests" class="mt-5">
+        <h3 class="mb-4">Available Tests</h3>
+        <div class="row g-4">
+            {% for test in tests %}
+            <div class="col-md-6">
+                <div class="card test-card fade-in">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-start mb-3">
+                            <div>
+                                <h5 class="card-title mb-1">{{ test[2] }}</h5>
+                                <p class="text-muted mb-0">{{ test[1] }}</p>
+                            </div>
+                            <span class="badge bg-primary">{{ test[3] }} marks</span>
+                        </div>
+                        <div class="test-info">
+                            <p class="mb-2">
+                                <i class="fas fa-clock me-2"></i>Duration: {{ test[4] }} minutes
+                            </p>
+                            <p class="mb-0">
+                                <i class="fas fa-question-circle me-2"></i>Questions: {{ test[5] }}
+                            </p>
+                        </div>
+                        <div class="mt-3">
+                            <a href="{{ url_for('take_test', test_id=test[0]) }}" class="btn btn-primary w-100">
+                                <i class="fas fa-play me-2"></i>Start Test
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<!-- Profile Section -->
+<div id="profile-section" class="sliding-panel">
+    <div class="panel-header">
+        <h3>Profile Settings</h3>
+        <button class="close-btn" onclick="hideProfile()">
+            <i class="fas fa-times"></i>
+        </button>
+    </div>
+    <div class="panel-body">
+        <form id="profile-form">
+            <div class="form-group">
+                <label class="form-label">Name</label>
+                <input type="text" class="form-control" id="student-name" name="student_name"
+                    value="{{ student_name }}">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Email</label>
+                <input type="email" class="form-control" id="student-email" value="{{ student_email }}" disabled>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Current Password</label>
+                <input type="password" class="form-control" id="current-password" name="current_password">
+            </div>
+            <div class="form-group">
+                <label class="form-label">New Password</label>
+                <input type="password" class="form-control" id="new-password" name="new_password">
+            </div>
+            <button type="submit" class="btn btn-primary w-100">
+                <i class="fas fa-save me-2"></i>Update Profile
+            </button>
+        </form>
+    </div>
+</div>
+
+<!-- History Section -->
+<div id="history-section" class="sliding-panel">
+    <div class="panel-header">
+        <h3>Test History</h3>
+        <button class="close-btn" onclick="hideHistory()">
+            <i class="fas fa-times"></i>
+        </button>
+    </div>
+    <div class="panel-body">
+        {% for result in history %}
+        <div class="card test-result-card mb-3">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                        <h5 class="card-title mb-1">{{ result[0] }}</h5>
+                        <p class="text-muted mb-1">
+                            <i class="fas fa-book me-2"></i>{{ result[1] }}
+                        </p>
+                        <p class="text-muted mb-0">
+                            <i class="fas fa-calendar me-2"></i>{{ result[4] }}
+                        </p>
+                    </div>
+                    <div class="text-end">
+                        <h4 class="mb-1">{{ result[2] }}/{{ result[3] }}</h4>
+                        {% set percentage = (result[2] / result[3] * 100) | round(2) %}
+                        <span
+                            class="badge {% if percentage >= 70 %}bg-success{% elif percentage >= 40 %}bg-warning{% else %}bg-danger{% endif %}">
+                            {{ percentage }}%
+                        </span>
+                    </div>
+                </div>
+                {% if percentage >= 40 %}
+                <div class="mt-3">
+                    <a href="{{ url_for('download_certificate', test_id=result[5]) }}"
+                        class="btn btn-outline-primary btn-sm">
+                        <i class="fas fa-download me-2"></i>Download Certificate
+                    </a>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    function showProfile() {
+        document.getElementById('profile-section').style.display = 'block';
+        document.getElementById('history-section').style.display = 'none';
+    }
+
+    function hideProfile() {
+        document.getElementById('profile-section').style.display = 'none';
+    }
+
+    function showHistory() {
+        document.getElementById('history-section').style.display = 'block';
+        document.getElementById('profile-section').style.display = 'none';
+    }
+
+    function hideHistory() {
+        document.getElementById('history-section').style.display = 'none';
+    }
+
+    function showAvailableTests() {
+        document.getElementById('profile-section').style.display = 'none';
+        document.getElementById('history-section').style.display = 'none';
+    }
+
+    document.getElementById('profile-form').addEventListener('submit', function (e) {
+        e.preventDefault();
+
+        const formData = new FormData(this);
+
+        fetch('/student/profile/update', {
+            method: 'POST',
+            body: formData
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('Profile updated successfully');
+                    location.reload();
+                } else {
+                    alert(data.error || 'Error updating profile');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error updating profile');
+            });
+    });
+</script>
+{% endblock %}

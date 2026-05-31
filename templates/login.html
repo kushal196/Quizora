@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+
+{% block title %}Login - Quizora{% endblock %}
+
+{% block extra_css %}
+<link href="{{ url_for('static', filename='css/login-style.css') }}" rel="stylesheet">
+<link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="welcome-message">
+        <h1>Hello and Welcome to Quizora</h1>
+        <p>Sign in to access your account</p>
+    </div>
+
+    <div class="form-box">
+        <form method="POST" action="{{ url_for('login') }}" id="loginForm" novalidate>
+            <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+            {% for category, message in messages %}
+            <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            {% endfor %}
+            {% endif %}
+            {% endwith %}
+
+            <div class="input-box">
+                <input type="email" name="email" placeholder="Email" required
+                    pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$">
+                <i class='bx bxs-envelope'></i>
+            </div>
+            <div class="input-box">
+                <input type="password" name="password" placeholder="Password" required minlength="6">
+                <i class='bx bxs-lock-alt'></i>
+            </div>
+
+            <!-- Google Sign-In Button -->
+            <div class="google-signin-container">
+                <a href="{{ url_for('google_login') }}" class="google-btn">
+                    <i class="fab fa-google google-icon"></i>
+                    <span>Sign in with Google</span>
+                </a>
+                <p class="google-note">Only @somaiya.edu emails are allowed. Admin emails will be redirected to admin
+                    pages.</p>
+            </div>
+
+            <div class="divider">
+                <span>or</span>
+            </div>
+
+            <button type="submit" class="btn">Login</button>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Form validation
+    const form = document.getElementById('loginForm');
+    form.addEventListener('submit', function (event) {
+        if (!form.checkValidity()) {
+            event.preventDefault();
+            event.stopPropagation();
+        }
+        form.classList.add('was-validated');
+    });
+
+    // Auto-hide alerts after 5 seconds
+    document.addEventListener('DOMContentLoaded', function () {
+        const alerts = document.querySelectorAll('.alert');
+        alerts.forEach(function (alert) {
+            setTimeout(function () {
+                const bsAlert = new bootstrap.Alert(alert);
+                bsAlert.close();
+            }, 5000);
+        });
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,519 @@
+:root {
+    /* Color System */
+    --primary-50: #eef2ff;
+    --primary-100: #e0e7ff;
+    --primary-200: #c7d2fe;
+    --primary-300: #a5b4fc;
+    --primary-400: #818cf8;
+    --primary-500: #6366f1;
+    --primary-600: #4f46e5;
+    --primary-700: #4338ca;
+    --primary-800: #3730a3;
+    --primary-900: #312e81;
+
+    /* Neutral Colors */
+    --neutral-50: #f9fafb;
+    --neutral-100: #f3f4f6;
+    --neutral-200: #e5e7eb;
+    --neutral-300: #d1d5db;
+    --neutral-400: #9ca3af;
+    --neutral-500: #6b7280;
+    --neutral-600: #4b5563;
+    --neutral-700: #374151;
+    --neutral-800: #1f2937;
+    --neutral-900: #111827;
+
+    /* Semantic Colors */
+    --success-50: #f0fdf4;
+    --success-500: #22c55e;
+    --success-700: #15803d;
+    --warning-50: #fffbeb;
+    --warning-500: #f59e0b;
+    --warning-700: #b45309;
+    --error-50: #fef2f2;
+    --error-500: #ef4444;
+    --error-700: #b91c1c;
+
+    /* Typography */
+    --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+    --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+
+    /* Spacing */
+    --spacing-1: 0.25rem;
+    --spacing-2: 0.5rem;
+    --spacing-3: 0.75rem;
+    --spacing-4: 1rem;
+    --spacing-5: 1.25rem;
+    --spacing-6: 1.5rem;
+    --spacing-8: 2rem;
+    --spacing-10: 2.5rem;
+    --spacing-12: 3rem;
+    --spacing-16: 4rem;
+
+    /* Border Radius */
+    --radius-sm: 0.125rem;
+    --radius-md: 0.375rem;
+    --radius-lg: 0.5rem;
+    --radius-xl: 0.75rem;
+    --radius-2xl: 1rem;
+    --radius-full: 9999px;
+
+    /* Shadows */
+    --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+    --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+    --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1);
+
+    /* Transitions */
+    --transition-all: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-colors: color 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-transform: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Base Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: var(--font-sans);
+    color: var(--neutral-900);
+    background-color: var(--neutral-50);
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+}
+
+.app-container {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Typography */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-weight: 600;
+    line-height: 1.25;
+    color: var(--neutral-900);
+}
+
+h1 {
+    font-size: 2.25rem;
+}
+
+h2 {
+    font-size: 1.875rem;
+}
+
+h3 {
+    font-size: 1.5rem;
+}
+
+h4 {
+    font-size: 1.25rem;
+}
+
+h5 {
+    font-size: 1.125rem;
+}
+
+h6 {
+    font-size: 1rem;
+}
+
+/* Navigation */
+.navbar {
+    background-color: white;
+    box-shadow: var(--shadow-sm);
+    padding: var(--spacing-4) 0;
+}
+
+.navbar-brand {
+    font-weight: 700;
+    color: var(--primary-600) !important;
+    font-size: 1.25rem;
+}
+
+.nav-link {
+    color: var(--neutral-600) !important;
+    font-weight: 500;
+    padding: var(--spacing-2) var(--spacing-4);
+    transition: var(--transition-colors);
+}
+
+.nav-link:hover {
+    color: var(--primary-600) !important;
+}
+
+/* Cards */
+.card {
+    background-color: white;
+    border: none;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-md);
+    transition: var(--transition-all);
+}
+
+.card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+}
+
+.card-body {
+    padding: var(--spacing-6);
+}
+
+.card-title {
+    color: var(--neutral-900);
+    font-weight: 600;
+    margin-bottom: var(--spacing-4);
+}
+
+/* Dashboard Cards */
+.dashboard-card {
+    cursor: pointer;
+    text-align: center;
+}
+
+.card-icon-wrapper {
+    width: 64px;
+    height: 64px;
+    margin: 0 auto;
+    background-color: var(--primary-50);
+    border-radius: var(--radius-full);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--primary-600);
+    font-size: 1.5rem;
+    transition: var(--transition-all);
+}
+
+.dashboard-card:hover .card-icon-wrapper {
+    background-color: var(--primary-100);
+    transform: scale(1.1);
+}
+
+/* Buttons */
+.btn {
+    font-weight: 500;
+    padding: var(--spacing-3) var(--spacing-6);
+    border-radius: var(--radius-md);
+    transition: var(--transition-all);
+}
+
+.btn-primary {
+    background-color: var(--primary-600);
+    border-color: var(--primary-600);
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: var(--primary-700);
+    border-color: var(--primary-700);
+    transform: translateY(-1px);
+}
+
+.btn-outline-primary {
+    color: var(--primary-600);
+    border-color: var(--primary-600);
+}
+
+.btn-outline-primary:hover {
+    background-color: var(--primary-600);
+    color: white;
+}
+
+/* Forms */
+.form-control {
+    padding: var(--spacing-3) var(--spacing-4);
+    border: 1px solid var(--neutral-300);
+    border-radius: var(--radius-md);
+    transition: var(--transition-all);
+}
+
+.form-control:focus {
+    border-color: var(--primary-500);
+    box-shadow: 0 0 0 3px var(--primary-100);
+}
+
+.form-label {
+    font-weight: 500;
+    color: var(--neutral-700);
+    margin-bottom: var(--spacing-2);
+}
+
+/* Tables */
+.table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+}
+
+.table th {
+    background-color: var(--neutral-50);
+    font-weight: 600;
+    color: var(--neutral-700);
+    padding: var(--spacing-4);
+    text-align: left;
+}
+
+.table td {
+    padding: var(--spacing-4);
+    border-bottom: 1px solid var(--neutral-200);
+}
+
+.table tbody tr:hover {
+    background-color: var(--neutral-50);
+}
+
+/* Badges */
+.badge {
+    font-weight: 500;
+    padding: var(--spacing-1) var(--spacing-2);
+    border-radius: var(--radius-full);
+}
+
+.bg-success {
+    background-color: var(--success-500) !important;
+}
+
+.bg-warning {
+    background-color: var(--warning-500) !important;
+}
+
+.bg-danger {
+    background-color: var(--error-500) !important;
+}
+
+/* Progress Bars */
+.progress {
+    height: 0.5rem;
+    background-color: var(--neutral-200);
+    border-radius: var(--radius-full);
+    overflow: hidden;
+}
+
+.progress-bar {
+    background-color: var(--primary-500);
+    transition: width 0.6s ease;
+}
+
+/* Alerts */
+.alert {
+    padding: var(--spacing-4);
+    border-radius: var(--radius-lg);
+    border: none;
+    margin-bottom: var(--spacing-4);
+}
+
+.alert-success {
+    background-color: var(--success-50);
+    color: var(--success-700);
+}
+
+.alert-warning {
+    background-color: var(--warning-50);
+    color: var(--warning-700);
+}
+
+.alert-danger {
+    background-color: var(--error-50);
+    color: var(--error-700);
+}
+
+/* Quiz Cards */
+.quiz-card {
+    background-color: white;
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-6);
+    transition: var(--transition-all);
+}
+
+.quiz-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+}
+
+.quiz-info {
+    color: var(--neutral-600);
+    font-size: 0.875rem;
+}
+
+/* Question Cards */
+.question-card {
+    background-color: white;
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-6);
+    margin-bottom: var(--spacing-6);
+    border-left: 4px solid var(--primary-500);
+}
+
+/* Option Buttons */
+.option-btn {
+    width: 100%;
+    padding: var(--spacing-4);
+    margin-bottom: var(--spacing-2);
+    background-color: white;
+    border: 1px solid var(--neutral-300);
+    border-radius: var(--radius-md);
+    text-align: left;
+    transition: var(--transition-all);
+}
+
+.option-btn:hover {
+    background-color: var(--primary-50);
+    border-color: var(--primary-300);
+}
+
+.option-btn.selected {
+    background-color: var(--primary-100);
+    border-color: var(--primary-500);
+    color: var(--primary-700);
+}
+
+/* Sliding Panels */
+.sliding-panel {
+    display: none;
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 100%;
+    max-width: 600px;
+    height: 100vh;
+    background-color: white;
+    box-shadow: var(--shadow-xl);
+    z-index: 1000;
+    overflow-y: auto;
+}
+
+.panel-header {
+    padding: var(--spacing-6);
+    border-bottom: 1px solid var(--neutral-200);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.panel-body {
+    padding: var(--spacing-6);
+}
+
+.close-btn {
+    background: none;
+    border: none;
+    color: var(--neutral-600);
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: var(--spacing-2);
+    transition: var(--transition-colors);
+}
+
+.close-btn:hover {
+    color: var(--neutral-900);
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.fade-in {
+    animation: fadeIn 0.3s ease-out;
+}
+
+/* Utility Classes */
+.text-primary {
+    color: var(--primary-600) !important;
+}
+
+.text-success {
+    color: var(--success-500) !important;
+}
+
+.text-warning {
+    color: var(--warning-500) !important;
+}
+
+.text-danger {
+    color: var(--error-500) !important;
+}
+
+.bg-primary {
+    background-color: var(--primary-600) !important;
+}
+
+.bg-success {
+    background-color: var(--success-500) !important;
+}
+
+.bg-warning {
+    background-color: var(--warning-500) !important;
+}
+
+.bg-danger {
+    background-color: var(--error-500) !important;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .container {
+        padding-left: var(--spacing-4);
+        padding-right: var(--spacing-4);
+    }
+
+    .card-body {
+        padding: var(--spacing-4);
+    }
+
+    .table {
+        display: block;
+        overflow-x: auto;
+    }
+
+    .sliding-panel {
+        max-width: 100%;
+    }
+
+    .panel-header {
+        padding: var(--spacing-4);
+    }
+
+    .panel-body {
+        padding: var(--spacing-4);
+    }
+}
+
+@media (max-width: 480px) {
+    .navbar {
+        padding: var(--spacing-3) 0;
+    }
+
+    .nav-link {
+        padding: var(--spacing-2);
+    }
+
+    .card-icon-wrapper {
+        width: 48px;
+        height: 48px;
+        font-size: 1.25rem;
+    }
+
+    .btn {
+        padding: var(--spacing-2) var(--spacing-4);
+    }
+}
